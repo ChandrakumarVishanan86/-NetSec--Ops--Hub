@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d16">
+  <meta name="description" content="NetSec Ops Hub — security, networking and sprint tools for ICT students and professionals.">
+  <title>NetSec Ops Hub</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="kanban.js" defer></script>
+  <script src="security.js" defer></script>
+  <script src="network.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- ============ Sidebar ============ -->
+    <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">NetSec Ops Hub</div>
+          <div class="brand-sub">ICT toolkit · v1.0</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Modules</div>
+      <nav class="nav">
+        <a class="nav-item" href="#/security" data-view="security">
+          <svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <span>Security &amp; Crypto Lab</span>
+        </a>
+        <a class="nav-item" href="#/network" data-view="network">
+          <svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 010 20"/><path d="M12 2a15 15 0 000 20"/></svg>
+          <span>Network &amp; IP Tools</span>
+        </a>
+        <a class="nav-item" href="#/kanban" data-view="kanban">
+          <svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/></svg>
+          <span>Sprint &amp; Incident Board</span>
+          <span class="nav-badge" id="kb-badge" title="Open tasks">0</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="privacy-card">
+          <span class="pulse" aria-hidden="true"></span>
+          <div>
+            <strong>100% client-side</strong>
+            <p>Nothing you type leaves this browser. Tasks are saved in localStorage.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <!-- ============ Main ============ -->
+    <div class="main" id="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open navigation">
+          <svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="topbar-title">
+          <h1 id="page-title">Security &amp; Crypto Lab</h1>
+          <p id="page-sub">Password entropy, hashing and classic ciphers.</p>
+        </div>
+        <div class="topbar-right">
+          <span class="chip-status"><span class="pulse" aria-hidden="true"></span>Local session</span>
+          <span class="chip-status mono" id="clock" aria-label="Local time">--:--</span>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- ================= MODULE 1: SECURITY ================= -->
+        <section class="view" id="view-security" hidden>
+
+          <article class="card" id="card-password">
+            <div class="card-head">
+              <div class="card-icon cyan"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div>
+                <h2>Password Strength Analyzer</h2>
+                <p>Live entropy estimate with an offline crack-time model (10 billion guesses/sec).</p>
+              </div>
+            </div>
+
+            <div class="split">
+              <div>
+                <label class="field-label" for="pw-input">Password to analyze</label>
+                <div class="input-group">
+                  <input id="pw-input" class="input mono has-btn" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type a password…">
+                  <button class="icon-btn input-btn" id="pw-toggle" type="button" aria-label="Show password"></button>
+                </div>
+
+                <div class="meter-wrap" id="pw-meter" data-level="empty">
+                  <div class="meter-top">
+                    <span class="badge" id="pw-label">Awaiting input</span>
+                    <span class="meter-bits mono" id="pw-bits">0 bits</span>
+                  </div>
+                  <div class="meter" id="pw-progress" role="progressbar" aria-label="Password strength" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <div class="meter-fill" id="pw-bar"></div>
+                  </div>
+                  <p class="hint" id="pw-hint">Start typing to see a live analysis.</p>
+                </div>
+              </div>
+
+              <div>
+                <div class="mini-stats">
+                  <div class="mini-stat"><span>Entropy</span><strong class="mono" id="pw-entropy">—</strong></div>
+                  <div class="mini-stat"><span>Length</span><strong class="mono" id="pw-length">0</strong></div>
+                  <div class="mini-stat"><span>Charset size</span><strong class="mono" id="pw-pool">0</strong></div>
+                  <div class="mini-stat crack"><span>Est. crack time</span><strong id="pw-crack" class="badge badge-crack">—</strong></div>
+                </div>
+                <ul class="checks" id="pw-checks">
+                  <li data-check="len">12+ characters</li>
+                  <li data-check="lower">Lowercase letters</li>
+                  <li data-check="upper">Uppercase letters</li>
+                  <li data-check="digit">Numbers</li>
+                  <li data-check="symbol">Symbols</li>
+                  <li data-check="pattern">No common words, repeats or sequences</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <span class="muted small">Analyzed locally. The password itself is never stored or sent to the board.</span>
+              <button class="btn btn-kanban" id="pw-send" type="button" disabled>
+                <svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Send to Kanban
+              </button>
+            </div>
+          </article>
+
+          <article class="card" id="card-crypto">
+            <div class="card-head">
+              <div class="card-icon violet"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 2l-2 2m-7.6 7.6a5.5 5.5 0 11-7.8 7.8 5.5 5.5 0 017.8-7.8zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+              <div>
+                <h2>Hash &amp; Cipher Playground</h2>
+                <p>One input, three transforms: SHA-256, Base64 and a Caesar cipher.</p>
+              </div>
+            </div>
+
+            <label class="field-label" for="cx-input">Input text</label>
+            <textarea id="cx-input" class="input mono" rows="3" spellcheck="false" placeholder="Enter text to hash, encode or encrypt…"></textarea>
+            <div class="field-meta">
+              <span id="cx-count" class="muted small">0 chars · 0 bytes</span>
+              <button class="link-btn" id="cx-clear" type="button">Clear</button>
+            </div>
+
+            <div class="tool-grid">
+              <div class="tool">
+                <div class="tool-head"><h3>SHA-256</h3><span class="badge badge-cyan">Web Crypto</span></div>
+                <div class="output mono is-empty" id="cx-sha">Awaiting input…</div>
+                <div class="tool-foot"><button class="btn btn-ghost btn-sm" id="cx-sha-copy" type="button">Copy hash</button></div>
+              </div>
+
+              <div class="tool">
+                <div class="tool-head"><h3>Base64</h3>
+                  <div class="segmented" id="b64-mode" role="group" aria-label="Base64 mode">
+                    <button class="seg active" type="button" data-value="encode" aria-pressed="true">Encode</button>
+                    <button class="seg" type="button" data-value="decode" aria-pressed="false">Decode</button>
+                  </div>
+                </div>
+                <div class="output mono is-empty" id="cx-b64">Awaiting input…</div>
+                <div class="tool-foot"><button class="btn btn-ghost btn-sm" id="cx-b64-copy" type="button">Copy result</button></div>
+              </div>
+
+              <div class="tool">
+                <div class="tool-head"><h3>Caesar Cipher</h3>
+                  <div class="segmented" id="cc-mode" role="group" aria-label="Caesar mode">
+                    <button class="seg active" type="button" data-value="encode" aria-pressed="true">Encode</button>
+                    <button class="seg" type="button" data-value="decode" aria-pressed="false">Decode</button>
+                  </div>
+                </div>
+                <div class="range-row">
+                  <label for="cx-shift">Shift</label>
+                  <input id="cx-shift" type="range" min="0" max="25" value="3" step="1">
+                  <span class="badge badge-violet mono" id="cx-shift-val">3</span>
+                </div>
+                <div class="output mono is-empty" id="cx-caesar">Awaiting input…</div>
+                <div class="tool-foot"><button class="btn btn-ghost btn-sm" id="cx-caesar-copy" type="button">Copy result</button></div>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <span class="muted small">Tip: switch Base64 to Decode and paste an encoded string to reverse it.</span>
+              <button class="btn btn-kanban" id="cx-send" type="button" disabled>
+                <svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Send to Kanban
+              </button>
+            </div>
+          </article>
+        </section>
+
+        <!-- ================= MODULE 2: NETWORK ================= -->
+        <section class="view" id="view-network" hidden>
+
+          <article class="card" id="card-subnet">
+            <div class="card-head">
+              <div class="card-icon emerald"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 010 20"/><path d="M12 2a15 15 0 000 20"/></svg></div>
+              <div>
+                <h2>IPv4 Subnet Calculator</h2>
+                <p>Enter an address and prefix (or paste CIDR like <span class="mono">10.0.0.0/8</span>). Click any result to copy it.</p>
+              </div>
+            </div>
+
+            <div class="subnet-inputs">
+              <div class="field">
+                <label class="field-label" for="ip-input">IPv4 address</label>
+                <input id="ip-input" class="input mono" value="192.168.10.37" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="192.168.10.37">
+              </div>
+              <div class="field cidr-field">
+                <label class="field-label" for="cidr-input">Prefix length</label>
+                <div class="input-group">
+                  <span class="input-prefix mono">/</span>
+                  <input id="cidr-input" class="input mono has-prefix" type="number" min="0" max="32" step="1" value="26" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+            <input id="cidr-range" type="range" min="0" max="32" step="1" value="26" aria-label="CIDR prefix length">
+            <div class="chip-row" id="cidr-presets" aria-label="Common prefixes">
+              <button class="chip" type="button" data-cidr="8">/8</button>
+              <button class="chip" type="button" data-cidr="16">/16</button>
+              <button class="chip" type="button" data-cidr="24">/24</button>
+              <button class="chip" type="button" data-cidr="26">/26</button>
+              <button class="chip" type="button" data-cidr="30">/30</button>
+              <button class="chip" type="button" data-cidr="32">/32</button>
+            </div>
+
+            <p class="form-error" id="ip-error" role="alert" hidden></p>
+
+            <div class="stat-grid" id="subnet-results"></div>
+
+            <h3 class="sub-h">Binary octet view</h3>
+            <div class="binary" id="subnet-binary"></div>
+            <div class="legend">
+              <span><i class="dot net"></i>Network bits</span>
+              <span><i class="dot host"></i>Host bits</span>
+            </div>
+
+            <div class="card-actions">
+              <span class="muted small" id="subnet-summary"></span>
+              <button class="btn btn-kanban" id="subnet-send" type="button">
+                <svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                Send to Kanban
+              </button>
+            </div>
+          </article>
+
+          <article class="card" id="card-ports">
+            <div class="card-head">
+              <div class="card-icon cyan"><svg class="ic" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10v4M10 10v4M14 10v4M18 10v4"/></svg></div>
+              <div>
+                <h2>Port Reference Lookup</h2>
+                <p>Search by port number, service, category or keyword. Use <span class="mono">+</span> to log an audit task.</p>
+              </div>
+            </div>
+
+            <div class="search-row">
+              <div class="input-group grow">
+                <span class="input-icon"><svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>
+                <input id="port-search" class="input has-icon" type="search" autocomplete="off" placeholder="Search e.g. 443, ssh, database, dns…">
+              </div>
+              <span class="muted small" id="port-count"></span>
+            </div>
+            <div class="chip-row" id="port-filters" aria-label="Category filters"></div>
+            <div class="port-grid" id="port-grid"></div>
+          </article>
+        </section>
+
+        <!-- ================= MODULE 3: KANBAN ================= -->
+        <section class="view" id="view-kanban" hidden>
+          <div class="kb-toolbar">
+            <div class="kb-stats">
+              <div class="kb-total"><strong id="kb-total">0</strong><span>tasks</span></div>
+              <div class="kb-progress">
+                <div class="meter" aria-hidden="true"><div class="meter-fill" id="kb-progress-bar"></div></div>
+                <span class="muted small" id="kb-progress-text">0% complete</span>
+              </div>
+            </div>
+            <div class="kb-actions">
+              <div class="input-group kb-search">
+                <span class="input-icon"><svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span>
+                <input id="kb-search" class="input has-icon" type="search" autocomplete="off" placeholder="Filter tasks…">
+              </div>
+              <button class="btn btn-ghost" id="kb-clear-done" type="button">Clear done</button>
+              <button class="btn btn-primary" id="kb-new" type="button">
+                <svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                New task
+              </button>
+            </div>
+          </div>
+          <div class="board" id="board"></div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Task modal ============ -->
+  <dialog id="task-modal" class="modal" aria-labelledby="modal-title">
+    <form id="task-form" novalidate>
+      <div class="modal-head">
+        <h2 id="modal-title">New task</h2>
+        <button type="button" class="icon-btn" id="modal-close" aria-label="Close dialog">
+          <svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <label class="field-label" for="task-title">Title</label>
+      <input id="task-title" class="input" maxlength="120" autocomplete="off" placeholder="e.g. Patch edge router firmware">
+      <label class="field-label" for="task-desc">Description</label>
+      <textarea id="task-desc" class="input" rows="6" maxlength="2000" placeholder="Details, acceptance criteria, commands, notes…"></textarea>
+      <div class="form-row">
+        <div><label class="field-label" for="task-priority">Priority</label><select id="task-priority" class="input"></select></div>
+        <div><label class="field-label" for="task-column">Column</label><select id="task-column" class="input"></select></div>
+        <div><label class="field-label" for="task-tag">Label</label><select id="task-tag" class="input"></select></div>
+      </div>
+      <p class="form-error" id="task-error" role="alert" hidden>A title is required.</p>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-ghost" id="task-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save task</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+</body>
+</html>
